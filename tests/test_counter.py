@@ -3,6 +3,11 @@ from pytest import fixture, mark
 
 
 @fixture(scope="function")
+def empty_counter():
+    return Counter()
+
+
+@fixture(scope="function")
 def counter():
     return Counter({"a": 2, "b": 3})
 
@@ -26,12 +31,13 @@ def test_nb_occurrences(counter, element, occurences):
 
 
 @mark.parametrize(
-    "element, increased_occurences",
-    [("a", 3), ("b", 4)],
+    "some_counter, element, increased_occurences",
+    [("empty_counter", "a", 1), ("counter", "a", 3), ("counter", "b", 4)],
 )
-def test_increase(counter, element, increased_occurences):
-    counter.increase(element)
-    assert counter.get_nb_occurences(element) == increased_occurences
+def test_increase(some_counter, element, increased_occurences, request):
+    actual_counter = request.getfixturevalue(some_counter)
+    actual_counter.increase(element)
+    assert actual_counter.get_nb_occurences(element) == increased_occurences
 
 
 def test_least_frequent_elements(counter2):
@@ -58,5 +64,9 @@ def test_should_be_equal(counter):
     assert counter == Counter({"a": 2, "b": 3})
 
 
-def test_should_not_be_equal(counter):
-    assert counter != Counter({"a": 2, "b": 1})
+@mark.parametrize(
+    "other",
+    [Counter({"a": 2, "b": 1}), "invalid"],
+)
+def test_should_not_be_equal(counter, other):
+    assert counter != other
