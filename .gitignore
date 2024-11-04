@@ -8,6 +8,7 @@ wheels/
 .pytest_cache
 Pipfile
 .ruff_cache
+.coverage
 
 # Virtual environments
 .venv
