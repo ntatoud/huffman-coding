@@ -1,6 +1,6 @@
 from typing import TypeVar, Generator, Any
 
-type T = TypeVar["T"]
+T = TypeVar("T")
 
 
 class PriorityQueueEmptyError(Exception):
@@ -22,14 +22,14 @@ class PriorityQueue[T]:
     def append(self, element: T):
         if self.is_empty:
             try:
-                element < element
+                element < element  # type: ignore
             except TypeError:
                 raise ElementNotComparableError(
                     f"The class of {repr(element)} do not posess comparison methods"
                 )
         else:
             try:
-                element < self.element
+                element < self.element  # type: ignore
             except TypeError:
                 raise ElementNotComparableError(
                     f"{repr(element)} can not be compared to {self.element}"
@@ -49,7 +49,7 @@ class PriorityQueue[T]:
     @property
     def element(self) -> T:
         try:
-            return min(self._queue)
+            return min(self._queue)  # type: ignore
         except ValueError:
             raise PriorityQueueEmptyError(
                 "The queue is empty. Impossible to retrieve an element"
