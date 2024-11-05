@@ -22,22 +22,22 @@ def test_elements(counter2):
 
 
 @mark.parametrize(
-    "element, occurences",
+    "element, occurrences",
     [("a", 2), ("b", 3), ("c", 0)],
 )
-def test_nb_occurrences(counter, element, occurences):
-    counter.set_nb_occurences(element, occurences)
-    assert counter.get_nb_occurences(element) == occurences
+def test_nb_occurrences(counter, element, occurrences):
+    counter.set_nb_occurrences(element, occurrences)
+    assert counter.get_nb_occurrences(element) == occurrences
 
 
 @mark.parametrize(
-    "some_counter, element, increased_occurences",
+    "some_counter, element, increased_occurrences",
     [("empty_counter", "a", 1), ("counter", "a", 3), ("counter", "b", 4)],
 )
-def test_increase(some_counter, element, increased_occurences, request):
+def test_increase(some_counter, element, increased_occurrences, request):
     actual_counter = request.getfixturevalue(some_counter)
     actual_counter.increase(element)
-    assert actual_counter.get_nb_occurences(element) == increased_occurences
+    assert actual_counter.get_nb_occurrences(element) == increased_occurrences
 
 
 def test_least_frequent_elements(counter2):
@@ -48,8 +48,8 @@ def test_most_frequent_elements(counter2):
     assert counter2.most_frequent_elements() == {"c", "e"}
 
 
-def test_elements_by_occurence(counter2):
-    assert counter2.elements_by_occurence() == {1: {"a", "d"}, 2: {"b"}, 3: {"c", "e"}}
+def test_elements_by_occurrence(counter2):
+    assert counter2.elements_by_occurrence() == {1: {"a", "d"}, 2: {"b"}, 3: {"c", "e"}}
 
 
 def test_str(counter):
