@@ -37,8 +37,8 @@ class HuffmanTree[T]:
                     "Left and right child can not be equal."
                 )
             self._init_node(left_child, right_child)
-
-        raise IncoherentHuffmanTreeError("Empty initialisation attempt.")
+        else:
+            raise IncoherentHuffmanTreeError("Empty initialisation attempt.")
 
     def equivalent(self, other: HuffmanTree) -> bool:
         if self.is_leaf and other.is_leaf:
@@ -47,9 +47,9 @@ class HuffmanTree[T]:
                 and self.nb_occurrences == other.nb_occurrences
             )
         elif self.is_node and other.is_node:
-            return self.left_child.equivalent(
-                other.left_child
-            ) and self.right_child.equivalent(other.right_child)
+            return self.left_child.equivalent(  # type: ignore
+                other.left_child  # type: ignore
+            ) and self.right_child.equivalent(other.right_child)  # type: ignore
 
         return False
 
@@ -80,21 +80,21 @@ class HuffmanTree[T]:
         return self._nb_occurrences
 
     @property
-    def element(self) -> T:
+    def element(self):
         if not self.is_leaf:
             raise MustBeALeafError()
 
         return self._element
 
     @property
-    def left_child(self) -> HuffmanTree[T]:
+    def left_child(self):
         if self.is_leaf:
             raise MustNotBeALeafError()
 
         return self._left_child
 
     @property
-    def right_child(self) -> HuffmanTree[T]:
+    def right_child(self):
         if self.is_leaf:
             raise MustNotBeALeafError()
 
