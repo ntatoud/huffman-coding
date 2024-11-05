@@ -15,45 +15,52 @@ class PriorityQueue[T]:
     def __init__(self, *element: T) -> None:
         self._queue = [*element]
 
-    @property
-    def is_empty(self) -> bool:
-        return len(self._queue) == 0
+    @staticmethod
+    def compare(element: Any, other: Any) -> bool:
+        return element < other
 
-    def append(self, element: T):
+    @staticmethod
+    def compare_or_fail(element: Any, other: Any, message="") -> None:
+        try:
+            PriorityQueue.compare(element, other)
+        except TypeError:
+            raise ElementNotComparableError(message)
+
+    def append(self, element: Any):
         if self.is_empty:
-            try:
-                element < element  # type: ignore
-            except TypeError:
-                raise ElementNotComparableError(
-                    f"The class of {repr(element)} do not posess comparison methods"
-                )
+            PriorityQueue.compare_or_fail(
+                element,
+                element,
+                f"The class of {repr(element)} do not posess comparison methods",
+            )
         else:
-            try:
-                element < self.element  # type: ignore
-            except TypeError:
-                raise ElementNotComparableError(
-                    f"{repr(element)} can not be compared to {self.element}"
-                )
+            PriorityQueue.compare_or_fail(
+                element,
+                self.element,
+                f"{repr(element)} can not be compared to {self.element}",
+            )
+
         self._queue = [element] + self._queue
 
-    def pop(self):
-        try:
-            element_to_pop = self._queue.index(self.element)
-        except PriorityQueueEmptyError:
+    def pop(self) -> T:
+        if self.is_empty:
             raise PriorityQueueEmptyError(
                 "The queue is empty. Impossible to remove an element"
             )
 
-        return self._queue.pop(element_to_pop)
+        return self._queue.pop(self._queue.index(self.element))
+
+    @property
+    def is_empty(self) -> bool:
+        return len(self._queue) == 0
 
     @property
     def element(self) -> T:
-        try:
-            return min(self._queue)  # type: ignore
-        except ValueError:
+        if self.is_empty:
             raise PriorityQueueEmptyError(
                 "The queue is empty. Impossible to retrieve an element"
             )
+        return min(self._queue)  # type: ignore
 
     def __iter__(self) -> Generator[T, Any, None]:
         for e in self._queue:
@@ -62,9 +69,10 @@ class PriorityQueue[T]:
     def __len__(self) -> int:
         return len(self._queue)
 
-    def __eq__(self, other):
+    def __eq__(self, other) -> bool:
         if len(self) != len(other):
             return False
+
         for s, a in zip(self, other):
             if s != a:
                 return False
