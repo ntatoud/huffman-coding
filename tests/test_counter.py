@@ -18,7 +18,7 @@ def counter2():
 
 
 def test_elements(counter2):
-    assert counter2.elements() == {"a", "b", "c", "d", "e"}
+    assert counter2.elements == {"a", "b", "c", "d", "e"}
 
 
 @mark.parametrize(
