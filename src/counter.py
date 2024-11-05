@@ -1,14 +1,11 @@
-from typing import TypeVar
+from typing import TypeVar, Dict, Set
 
 T = TypeVar("T")
 
 
 class Counter[T]:
-    def __init__(self, elements: dict[T, int] = {}) -> None:
+    def __init__(self, elements: Dict[T, int] = {}) -> None:
         self._elements = elements.copy()
-
-    def elements(self):
-        return self._elements.keys()
 
     def increase(self, element: T) -> None:
         if element in self._elements.keys():
@@ -22,19 +19,23 @@ class Counter[T]:
     def get_nb_occurences(self, element: T) -> int:
         return self._elements.get(element, 0)
 
-    def most_frequent_elements(self) -> set[T]:
+    def most_frequent_elements(self) -> Set[T]:
         return self._elements_for_nb_occurences(max(self._elements.values()))
 
-    def least_frequent_elements(self) -> set[T]:
+    def least_frequent_elements(self) -> Set[T]:
         return self._elements_for_nb_occurences(min(self._elements.values()))
 
-    def elements_by_occurence(self) -> dict[int, set[T]]:
+    def elements_by_occurence(self) -> Dict[int, Set[T]]:
         return {
             element: self._elements_for_nb_occurences(element)
             for element in sorted(set(self._elements.values()))
         }
 
-    def _elements_for_nb_occurences(self, nb_occurences: int) -> set[T]:
+    @property
+    def elements(self):
+        return self._elements.keys()
+
+    def _elements_for_nb_occurences(self, nb_occurences: int) -> Set[T]:
         return {
             element
             for element in self._elements
