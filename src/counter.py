@@ -13,21 +13,21 @@ class Counter[T]:
         else:
             self._elements[element] = 1
 
-    def set_nb_occurences(self, element: T, value: int) -> None:
+    def set_nb_occurrences(self, element: T, value: int) -> None:
         self._elements[element] = value
 
-    def get_nb_occurences(self, element: T) -> int:
+    def get_nb_occurrences(self, element: T) -> int:
         return self._elements.get(element, 0)
 
     def most_frequent_elements(self) -> Set[T]:
-        return self._elements_for_nb_occurences(max(self._elements.values()))
+        return self._elements_for_nb_occurrences(max(self._elements.values()))
 
     def least_frequent_elements(self) -> Set[T]:
-        return self._elements_for_nb_occurences(min(self._elements.values()))
+        return self._elements_for_nb_occurrences(min(self._elements.values()))
 
-    def elements_by_occurence(self) -> Dict[int, Set[T]]:
+    def elements_by_occurrence(self) -> Dict[int, Set[T]]:
         return {
-            element: self._elements_for_nb_occurences(element)
+            element: self._elements_for_nb_occurrences(element)
             for element in sorted(set(self._elements.values()))
         }
 
@@ -35,11 +35,11 @@ class Counter[T]:
     def elements(self):
         return self._elements.keys()
 
-    def _elements_for_nb_occurences(self, nb_occurences: int) -> Set[T]:
+    def _elements_for_nb_occurrences(self, nb_occurrences: int) -> Set[T]:
         return {
             element
             for element in self._elements
-            if self._elements[element] == nb_occurences
+            if self._elements[element] == nb_occurrences
         }
 
     def __eq__(self, other) -> bool:
