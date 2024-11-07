@@ -9,6 +9,7 @@ wheels/
 Pipfile
 .ruff_cache
 .coverage
+Pipfile.lock
 
 # Virtual environments
 .venv

@@ -14,17 +14,17 @@ def empty_queue():
 
 @pytest.fixture(scope="function")
 def non_empty_queue():
-    return PriorityQueue(2, 1, 4, 3, 5)
+    return PriorityQueue((2, 1, 4, 3, 5))
 
 
 @pytest.fixture(scope="function")
 def non_empty_queue2():
-    return PriorityQueue(2, 1, 4, 3, 5)
+    return PriorityQueue((2, 1, 4, 3, 5))
 
 
 @pytest.fixture(scope="function")
 def non_empty_queue3():
-    return PriorityQueue(2, 1, 4, 3, 6)
+    return PriorityQueue((2, 1, 4, 3, 6))
 
 
 @pytest.mark.parametrize(
@@ -60,7 +60,7 @@ def test_append_then_pop_with_higher_priority(non_empty_queue, non_empty_queue2)
 def test_append_then_pop_with_lower_priority(non_empty_queue):
     non_empty_queue.append(4)
     non_empty_queue.pop()
-    assert non_empty_queue == PriorityQueue(4, 2, 4, 3, 5)
+    assert non_empty_queue == PriorityQueue((4, 2, 4, 3, 5))
 
 
 def test_append_highest_priority_element(non_empty_queue):
@@ -72,7 +72,7 @@ def test_append_highest_priority_element(non_empty_queue):
     "priority_queue, expected",
     [
         ("empty_queue", "PriorityQueue()"),
-        ("non_empty_queue", "PriorityQueue(2, 1, 4, 3, 5)"),
+        ("non_empty_queue", "PriorityQueue(1, 2, 3, 4, 5)"),
     ],
 )
 def test_repr(priority_queue, expected, request):
@@ -83,7 +83,7 @@ def test_repr(priority_queue, expected, request):
     "priority_queue, expected",
     [
         ("empty_queue", ""),
-        ("non_empty_queue", "2, 1, 4, 3, 5"),
+        ("non_empty_queue", "1, 2, 3, 4, 5"),
     ],
 )
 def test_str(priority_queue, expected, request):

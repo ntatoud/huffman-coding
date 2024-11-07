@@ -1,4 +1,5 @@
-from typing import TypeVar, Generator, Any
+from bisect import insort
+from typing import TypeVar, Any, Iterator, List
 
 T = TypeVar("T")
 
@@ -12,8 +13,9 @@ class ElementNotComparableError(Exception):
 
 
 class PriorityQueue[T]:
-    def __init__(self, *element: T) -> None:
-        self._queue = [*element]
+    def __init__(self, element=(), key=lambda e: e) -> None:
+        self._key = key
+        self._queue: List[T] = sorted([*element], key=self._key)
 
     @staticmethod
     def compare(element: Any, other: Any) -> bool:
@@ -40,7 +42,7 @@ class PriorityQueue[T]:
                 f"{repr(element)} can not be compared to {self.element}",
             )
 
-        self._queue = [element] + self._queue
+        insort(self._queue, element, key=self._key)
 
     def pop(self) -> T:
         if self.is_empty:
@@ -48,7 +50,7 @@ class PriorityQueue[T]:
                 "The queue is empty. Impossible to remove an element"
             )
 
-        return self._queue.pop(self._queue.index(self.element))
+        return self._queue.pop(0)
 
     @property
     def is_empty(self) -> bool:
@@ -60,11 +62,11 @@ class PriorityQueue[T]:
             raise PriorityQueueEmptyError(
                 "The queue is empty. Impossible to retrieve an element"
             )
-        return min(self._queue)  # type: ignore
 
-    def __iter__(self) -> Generator[T, Any, None]:
-        for e in self._queue:
-            yield e
+        return self._queue[0]
+
+    def __iter__(self) -> Iterator[T]:
+        return iter(self._queue)
 
     def __len__(self) -> int:
         return len(self._queue)
