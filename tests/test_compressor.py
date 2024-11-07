@@ -1,4 +1,5 @@
 import io
+
 # A 65, B 66, C 67, D 68, E 69, F 70, G 71
 import itertools
 from io import BytesIO
