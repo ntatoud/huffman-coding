@@ -1,26 +1,20 @@
-from io import BufferedReader, BytesIO
-from typing import NamedTuple, Dict
+from typing import Dict
 
 from src.binary_code import BinaryCode, Bit
+from src.compressor.types import Statistics
 from src.counter import Counter
 from src.huffman_tree import HuffmanTree
 from src.priority_queue import PriorityQueue
 
 
-class Statistics(NamedTuple):
-    counter: Counter
-    length: int
-
-
-def statistics(source: BufferedReader | BytesIO) -> Statistics:
+def statistics(source_bytes: bytes) -> Statistics:
     """Compute the number of bytes in a binary stream and the number of occurences of each byte"""
     counter = Counter()
-    data = source.read()
 
-    for byte in data:
+    for byte in source_bytes:
         counter.increase(byte)
 
-    return Statistics(counter, len(data))
+    return Statistics(counter, len(source_bytes))
 
 
 def huffman_tree[TData](stat: Counter[TData]) -> HuffmanTree[TData]:
@@ -35,8 +29,6 @@ def huffman_tree[TData](stat: Counter[TData]) -> HuffmanTree[TData]:
                 element=element, nb_occurrences=stat.get_nb_occurrences(element)
             )
         )
-
-    print(tree_queue)
 
     while len(tree_queue) > 1:
         first_tree = tree_queue.pop()

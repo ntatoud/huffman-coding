@@ -1,5 +1,5 @@
-from typing import Any, List, Generator
 from enum import Enum
+from typing import Any, List, Generator
 
 
 class AtLeastOneBitError(Exception):
@@ -52,7 +52,7 @@ class BinaryCode:
             yield bit
 
     def __eq__(self, other) -> bool:
-        return self._bits == other._bits
+        return self._bits == other.bits
 
     def __repr__(self):
         return "BinaryCode(" + str(self) + ")"
